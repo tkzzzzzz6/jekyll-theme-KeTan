@@ -16,6 +16,15 @@ layout: compress
   {% if site.plugins contains 'jekyll-seo-tag' %}
   {% seo title=false %}
   {% endif %}
+  <style>
+    @media (max-width: 768px) {
+      #wrap-content {
+        padding: 1rem !important;
+        margin: 0.5rem !important;
+        border-radius: 4px;
+      }
+    }
+  </style>
   {% for node in page.jekyll-theme-WuK.default.append_to_head %}
   {{ node }}
   {% endfor %}
@@ -37,7 +46,6 @@ layout: compress
       <summary class="btn" aria-haspopup="true">
         Menu
       </summary>
-
       <div class="SelectMenu right-0">
 
         <div class="SelectMenu-modal">
@@ -85,7 +93,7 @@ layout: compress
        data-color-mode="{{ page.jekyll-theme-WuK.default.color-mode | default: 'auto'}}"
        data-light-theme="{{ page.jekyll-theme-WuK.default.light-theme | default: 'light'}}"
        data-dark-theme="{{ page.jekyll-theme-WuK.default.dark-theme | default: 'dark'}}"
-       style="background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 2rem; margin: 2rem; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); color: #eee;">
+       style="background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 1.5rem; margin: 1rem; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); color: #eee;">
 
     {% capture _content %}
     {{ content }}
