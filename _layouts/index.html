@@ -1,0 +1,146 @@
+---
+layout: home
+title: Home
+permalink: /
+---
+
+{% raw %}{% assign recent_limit = site.jekyll-theme-WuK.default.homepage.recent_limit | default: 6 %}
+{% assign popular_categories = site.jekyll-theme-WuK.default.homepage.popular_categories | default: 5 %}{% endraw %}
+
+<style>
+/* 保留原有样式，但修改颜色变量为动态继承 */
+:root {
+    --bg-primary: rgba(13, 17, 23, 0.85);
+    --bg-secondary: #161b22;
+    --text-primary: #c9d1d9;
+    --text-secondary: #8b949e;
+    --accent-color: {% raw %}{{ site.jekyll-theme-WuK.default.accent_color | default: '#58a6ff' }}{% endraw %};
+}
+
+/* 动态文章卡片 */
+.post-card { 
+    background: rgba(22, 27, 34, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.2s;
+    {% raw %}{% comment %}/* 使用Jekyll变量动态设置边框颜色*/{% endcomment %}{% endraw %}
+    border-left: 4px solid var(--accent-color);
+}
+
+/* 自动适应文章数量的网格布局 */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+</style>
+
+<div class="content-wrapper">
+    <!-- 动态统计模块 -->
+    <div class="card stats-card">
+        <div class="stats">
+            <div class="stat-item">
+                <div>📚 Total Posts</div>
+                <div>{{ site.posts.size }}</div>
+            </div>
+            <div class="stat-item">
+                <div>🏷️ Categories</div>
+                <div>{{ site.categories.size }}</div>
+            </div>
+            <div class="stat-item">
+                <div>🔖 Tags</div>
+                <div>{{ site.tags.size }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自动生成热门分类 -->
+    <div class="card">
+        <h3>🔥 Popular Categories</h3>
+        <div class="tags">
+            {% raw %}{% assign categories = site.categories | sort: 'size' | reverse %}
+            {% for category in categories limit: popular_categories %}{% endraw %}
+            <a href="/categories/#{{ category[0] | slugify }}" class="tag">
+                {{ category[0] }} ({{ category[1].size }})
+            </a>
+            {% raw %}{% endfor %}{% endraw %}
+        </div>
+    </div>
+
+    <!-- 动态文章网格 -->
+    <section class="recent-posts">
+        <h2>📚 Latest Articles</h2>
+        <div class="posts-grid">
+            {% raw %}{% for post in site.posts limit: recent_limit %}{% endraw %}
+            <article class="post-card">
+                <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%b %d, %Y" }}</time>
+                <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+                <div class="post-meta">
+                    {% if post.categories.size > 0 %}
+                    <span class="categories">
+                        📁 {{ post.categories | join: " · " }}
+                    </span>
+                    {% endif %}
+                    {% if post.tags.size > 0 %}
+                    <span class="tags">
+                        🏷️ {{ post.tags | join: " · " }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% if post.excerpt %}
+                <p class="excerpt">{{ post.excerpt | strip_html | truncate: 120 }}</p>
+                {% endif %}
+            </article>
+            {% raw %}{% endfor %}{% endraw %}
+        </div>
+    </section>
+
+    <!-- 自动生成年度归档 -->
+    <div class="card">
+        <h3>🗓️ Yearly Archive</h3>
+        <div class="archive-list">
+            {% assign postsByYear = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+            {% for year in postsByYear %}
+            <details>
+                <summary>{{ year.name }} ({{ year.items.size }})</summary>
+                <div class="year-posts">
+                    {% for post in year.items %}
+                    <a href="{{ post.url }}" class="post-link">{{ post.title }}</a>
+                    {% endfor %}
+                </div>
+            </details>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+// 动态搜索功能增强
+function searchPosts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.post-card');
+    
+    cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(searchTerm) ? 'block' : 'none';
+    });
+}
+
+// 自动加载更多内容
+let currentPage = 1;
+window.addEventListener('scroll', () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadMorePosts();
+    }
+});
+
+async function loadMorePosts() {
+    currentPage++;
+    const response = await fetch(`/page${currentPage}/`);
+    if (!response.ok) return;
+    
+    const html = await response.text();
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    document.querySelector('.posts-grid').appendChild(doc.querySelector('.posts-grid').innerHTML);
+}
+</script> 
