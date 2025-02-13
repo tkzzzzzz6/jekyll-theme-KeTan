@@ -21,7 +21,9 @@ layout: compress
   {% endfor %}
 </head>
 
-<body>
+<body style="background: url('https://fastly.jsdelivr.net/gh/tkzzzzzz6/imagehost@main/blog/1739340406785wallhaven-579jp3_3840x2160.png') no-repeat center center fixed; background-size: cover;">
+  <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: -1;"></div>
+
   <div id="wrap-loader">
     <span class="loader"></span>
   </div>
@@ -80,9 +82,11 @@ layout: compress
 
   </div>
 
-  <div id="wrap-content" data-color-mode="{{ page.jekyll-theme-WuK.default.color-mode | default: 'auto'}}"
-    data-light-theme="{{ page.jekyll-theme-WuK.default.light-theme | default: 'light'}}"
-    data-dark-theme="{{ page.jekyll-theme-WuK.default.dark-theme | default: 'dark'}}">
+  <div id="wrap-content" 
+       data-color-mode="{{ page.jekyll-theme-WuK.default.color-mode | default: 'auto'}}"
+       data-light-theme="{{ page.jekyll-theme-WuK.default.light-theme | default: 'light'}}"
+       data-dark-theme="{{ page.jekyll-theme-WuK.default.dark-theme | default: 'dark'}}"
+       style="background: rgba(255, 255, 255, 0.9); border-radius: 8px; padding: 2rem; margin: 2rem; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
 
     {% capture _content %}
     {{ content }}
