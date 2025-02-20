@@ -22,7 +22,6 @@ permalink: /
     background: rgba(22, 27, 34, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: transform 0.2s;
-    {% raw %}{% comment %}/* 使用Jekyll变量动态设置边框颜色*/{% endcomment %}{% endraw %}
     border-left: 4px solid var(--accent-color);
 }
 
@@ -144,3 +143,24 @@ async function loadMorePosts() {
     document.querySelector('.posts-grid').appendChild(doc.querySelector('.posts-grid').innerHTML);
 }
 </script> 
+
+<!-- 嵌入help me think 对话组件 -->
+<script>
+ window.difyChatbotConfig = {
+  token: 'NZ0JrCvwT84Frl1j'
+ }
+</script>
+<script
+ src="https://udify.app/embed.min.js"
+ id="NZ0JrCvwT84Frl1j"
+ defer>
+</script>
+<style>
+  #dify-chatbot-bubble-button {
+    background-color: #1C64F2 !important;
+  }
+  #dify-chatbot-bubble-window {
+    width: 24rem !important;
+    height: 40rem !important;
+  }
+</style>
